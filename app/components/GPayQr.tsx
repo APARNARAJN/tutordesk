@@ -1,6 +1,5 @@
 import QRCode from "qrcode";
-import { buildUpiUri } from "@/lib/upi";
-import { CopyButton } from "./CopyButton";
+import { buildDemoUpiUri } from "@/lib/upi";
 
 export async function GPayQr({
   amount,
@@ -13,7 +12,7 @@ export async function GPayQr({
   title?: string;
   compact?: boolean;
 }) {
-  const { uri, upiId, payeeName } = buildUpiUri(amount, note);
+  const { uri, upiId, payeeName } = buildDemoUpiUri(amount, note);
   const dataUrl = await QRCode.toDataURL(uri, {
     width: compact ? 160 : 200,
     margin: 2,
@@ -28,7 +27,7 @@ export async function GPayQr({
       <div className="gpay-qr-wrap">
         <img
           src={dataUrl}
-          alt={`GPay UPI QR code to pay ₹${amount} to ${payeeName}`}
+          alt={`Sample GPay QR code for ₹${amount}`}
           width={compact ? 136 : 164}
           height={compact ? 136 : 164}
           className="gpay-qr-img"
@@ -37,7 +36,7 @@ export async function GPayQr({
 
       <div className="gpay-info">
         <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexWrap: "wrap" }}>
-          <span className="pill pill-teal">GPay / UPI</span>
+          <span className="pill pill-teal">GPay QR (Demo)</span>
           <strong style={{ fontSize: "1rem", color: "var(--ink)" }}>
             ₹{amount}
           </strong>
@@ -47,19 +46,11 @@ export async function GPayQr({
             {title}
           </div>
         )}
-        <p style={{ fontSize: "0.8rem", margin: "0.25rem 0 0.5rem", color: "var(--ink-soft)" }}>
-          Scan with Google Pay, PhonePe, or any UPI app to pay{" "}
-          <strong>{payeeName}</strong>.
+        <p style={{ fontSize: "0.8rem", margin: "0.25rem 0 0.45rem", color: "var(--ink-soft)" }}>
+          Sample Google Pay QR preview for <strong>{payeeName}</strong> (for
+          display only — no real payment required).
         </p>
-
-        <div className="gpay-upi-row">
-          <code>{upiId}</code>
-          <CopyButton text={upiId} label="Copy UPI" />
-        </div>
-
-        <a href={uri} className="btn btn-alt btn-sm" style={{ marginTop: "0.55rem" }}>
-          Open GPay / UPI App ↗
-        </a>
+        <code>{upiId}</code>
       </div>
     </div>
   );

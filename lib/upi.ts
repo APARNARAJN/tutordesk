@@ -1,12 +1,6 @@
-export function buildUpiUri(amount: number, note: string) {
-  const upiId =
-    process.env.OWNER_UPI_ID ||
-    process.env.NEXT_PUBLIC_OWNER_UPI_ID ||
-    "tutordesk@okicici";
-  const payeeName =
-    process.env.OWNER_UPI_NAME ||
-    process.env.NEXT_PUBLIC_OWNER_UPI_NAME ||
-    "TutorDesk";
+export function buildDemoUpiUri(amount: number, note: string) {
+  const upiId = "tutordesk.demo@okicici";
+  const payeeName = "TutorDesk";
 
   const params = new URLSearchParams({
     pa: upiId,
