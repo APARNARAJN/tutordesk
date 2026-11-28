@@ -5,8 +5,43 @@ import { revalidatePath } from "next/cache";
 
 export async function signup(f: FormData) {
   const name = String(f.get("name"));
-  const { data } = await db.from("tutors").insert({ name, slug: slugify(name) }).select().single();
+  const regPaid = f.get("reg_paid_confirm") === "on";
+  const { data } = await db
+    .from("tutors")
+    .insert({ name, slug: slugify(name), reg_paid: regPaid })
+    .select()
+    .single();
+  if (data) {
+    await db.from("payments").insert({
+      tutor_id: data.id,
+      kind: "reg_fee",
+      amount: 200,
+      status: regPaid ? "paid" : "pending",
+    });
+  }
   redirect(`/dashboard?key=${data.token}`);
+}
+export async function confirmRegPayment(f: FormData) {
+  const t = await tutorByToken(String(f.get("key")));
+  if (!t) return;
+  await db.from("tutors").update({ reg_paid: true }).eq("id", t.id);
+  const { data: existing } = await db
+    .from("payments")
+    .select("id")
+    .eq("tutor_id", t.id)
+    .eq("kind", "reg_fee");
+  if (existing?.length) {
+    await db
+      .from("payments")
+      .update({ status: "paid" })
+      .eq("tutor_id", t.id)
+      .eq("kind", "reg_fee");
+  } else {
+    await db
+      .from("payments")
+      .insert({ tutor_id: t.id, kind: "reg_fee", amount: 200, status: "paid" });
+  }
+  revalidatePath("/dashboard");
 }
 export async function enquire(f: FormData) {
   await db.from("enquiries").insert({ tutor_id: f.get("tutor_id"), parent_name: f.get("parent_name"), parent_email: f.get("parent_email"),

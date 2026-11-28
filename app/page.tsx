@@ -1,4 +1,7 @@
 import { signup } from "./actions";
+import { GPayQr } from "./components/GPayQr";
+
+export const dynamic = "force-dynamic";
 
 export default function Home() {
   return (
@@ -20,30 +23,60 @@ export default function Home() {
           </p>
 
           <form action={signup} className="signup-card">
-            <label htmlFor="tutor-name">Start with your name</label>
-            <div className="signup-row">
-              <input
-                id="tutor-name"
-                name="name"
-                placeholder="e.g. Ananya Menon"
-                required
-              />
-              <button type="submit">Create tutor profile</button>
-            </div>
-            <p
+            <div
               style={{
-                fontSize: "0.82rem",
-                margin: "0.65rem 0 0",
-                color: "var(--ink-muted)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "0.5rem",
+                flexWrap: "wrap",
+                marginBottom: "0.85rem",
               }}
             >
-              Instant setup — no password required. You&apos;ll get a private
-              dashboard link and a Claude MCP connector URL right away.
-            </p>
+              <strong style={{ fontSize: "1rem", color: "var(--ink)" }}>
+                Create your tutor profile
+              </strong>
+              <span className="pill pill-trial">₹200 Lifetime Registration</span>
+            </div>
+
+            <label htmlFor="tutor-name">Your name</label>
+            <input
+              id="tutor-name"
+              name="name"
+              placeholder="e.g. Ananya Menon"
+              required
+              style={{ marginBottom: "0.5rem" }}
+            />
+
+            <GPayQr
+              amount={200}
+              note="TutorDesk Lifetime Registration"
+              title="One-time lifetime registration fee (₹200)"
+              compact
+            />
+
+            <label className="checkbox-row">
+              <input type="checkbox" name="reg_paid_confirm" required />
+              <span>
+                I have paid the <strong>₹200 lifetime registration fee</strong>{" "}
+                via GPay / UPI to activate my profile.
+              </span>
+            </label>
+
+            <button type="submit" style={{ width: "100%" }}>
+              Create tutor profile
+            </button>
+
+            <div className="notice-banner" style={{ marginTop: "0.9rem" }}>
+              <strong>Zero-risk client fee:</strong> You only pay{" "}
+              <strong>₹1,000 for every confirmed client</strong> — payable{" "}
+              <strong>after 1 month of teaching</strong> from what the parent pays
+              you, <strong>never out of your own pocket</strong> upfront.
+            </div>
           </form>
         </div>
 
-        {/* Visual Preview Card */}
+        {/* Visual Preview & Pricing Card */}
         <aside className="hero-preview" aria-label="TutorDesk workflow preview">
           <div
             style={{
@@ -110,6 +143,32 @@ export default function Home() {
               <code>/m/trial-plan</code>
             </p>
           </div>
+
+          <div
+            className="preview-item"
+            style={{
+              background: "#fffbeb",
+              borderColor: "#fde68a",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <strong style={{ fontSize: "0.92rem", color: "#451a03" }}>
+                Pay Only When You Earn
+              </strong>
+              <span className="pill pill-trial">₹1,000 / client</span>
+            </div>
+            <p style={{ fontSize: "0.83rem", margin: "0.35rem 0 0", color: "#78350f" }}>
+              ₹200 once to register for life. Then ₹1,000 per student only after
+              1 full month of teaching — never out of your pocket.
+            </p>
+          </div>
         </aside>
       </section>
 
@@ -124,10 +183,10 @@ export default function Home() {
         <div className="grid-3">
           <div className="card">
             <span className="step-num">1</span>
-            <h3>Create your tutor profile</h3>
+            <h3>Pay ₹200 once &amp; register</h3>
             <p style={{ margin: 0, fontSize: "0.92rem" }}>
-              Enter your name above to get your live public profile link and your
-              private dashboard — bookmark it anytime.
+              Scan the GPay QR code, enter your name, and get your live public
+              profile plus your private dashboard immediately.
             </p>
           </div>
           <div className="card">
@@ -140,30 +199,44 @@ export default function Home() {
           </div>
           <div className="card">
             <span className="step-num">3</span>
-            <h3>Review, send &amp; teach</h3>
+            <h3>Teach first, pay ₹1,000 later</h3>
             <p style={{ margin: 0, fontSize: "0.92rem" }}>
-              Ask Claude to update your bio, draft replies to new enquiries, or
-              generate shareable study sheets — you approve everything.
+              When a parent converts, you only pay ₹1,000 per client after 1
+              month of teaching — straight from your tuition earnings.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Capabilities */}
+      {/* Pricing & Capabilities */}
       <section className="section-block">
         <div className="section-header">
           <div>
-            <h2>Everything an independent tutor needs</h2>
-            <p>Simple tools that stay out of your way while keeping parents impressed.</p>
+            <h2>Simple pricing &amp; everything a tutor needs</h2>
+            <p>No monthly subscription traps. You pay for confirmed students after you earn.</p>
           </div>
         </div>
         <div className="grid-2">
           <div className="card">
-            <h3>Public Profile &amp; Enquiry Intake</h3>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+              <h3 style={{ margin: 0 }}>₹200 Lifetime Registration</h3>
+              <span className="pill pill-active">One-time</span>
+            </div>
             <p style={{ margin: 0, fontSize: "0.92rem" }}>
-              Share one clean link with your subjects, classes taught, online/offline
-              mode, location, hourly rate, and an enquiry form that feeds straight into
-              your desk.
+              A single ₹200 GPay payment unlocks your permanent public profile
+              link, Claude MCP connector, enquiry inbox, and study material
+              hosting for life.
+            </p>
+          </div>
+          <div className="card">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+              <h3 style={{ margin: 0 }}>₹1,000 Per Client (After 1 Month)</h3>
+              <span className="pill pill-trial">Success-based</span>
+            </div>
+            <p style={{ margin: 0, fontSize: "0.92rem" }}>
+              For every student you start teaching through TutorDesk, you pay
+              ₹1,000 only after completing 1 month of classes — out of what the
+              parent pays you, never out of your own pocket.
             </p>
           </div>
           <div className="card">
@@ -178,13 +251,6 @@ export default function Home() {
             <p style={{ margin: 0, fontSize: "0.92rem" }}>
               Edit generated study materials in your dashboard and send parents a clean,
               printable reading link with zero clutter.
-            </p>
-          </div>
-          <div className="card">
-            <h3>Simple Student Status &amp; Payments</h3>
-            <p style={{ margin: 0, fontSize: "0.92rem" }}>
-              Move enquiries from <code>new</code> → <code>trial</code> →{" "}
-              <code>active</code> and mark pending fees as paid with a single click.
             </p>
           </div>
         </div>
