@@ -75,7 +75,7 @@ function NavbarInner() {
                 href={dashboardHref}
                 className={`nav-link ${isDashboard ? "nav-link-active" : ""}`}
               >
-                Dashboard
+                {activeKey ? "Dashboard" : "Log in"}
               </Link>
               <Link href="/#get-started" className="nav-cta">
                 Create profile
@@ -128,7 +128,7 @@ function NavbarInner() {
                 className={`nav-link ${isDashboard ? "nav-link-active" : ""}`}
                 onClick={close}
               >
-                Dashboard
+                {activeKey ? "Dashboard" : "Log in"}
               </Link>
               <Link href="/#get-started" className="nav-cta" onClick={close} style={{ marginLeft: 0, textAlign: "center", marginTop: "0.25rem" }}>
                 Create profile

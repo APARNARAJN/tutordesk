@@ -6,9 +6,11 @@ import {
   markPaid,
   saveMaterial,
   confirmRegPayment,
+  loginWithKey,
 } from "@/app/actions";
 import { CopyButton } from "@/app/components/CopyButton";
 import { GPayQr } from "@/app/components/GPayQr";
+import { LogoutButton } from "@/app/components/LogoutButton";
 
 export const dynamic = "force-dynamic";
 
@@ -49,28 +51,59 @@ export default async function DashboardPage({ searchParams }: any) {
   const t = key && (await tutorByToken(key));
 
   if (!t) {
+    const invalid = searchParams?.error === "invalid";
     return (
       <main className="page-main page-main-narrow">
         <div
           className="card card-elevated"
-          style={{ textAlign: "center", padding: "2.5rem 1.5rem", marginTop: "2rem" }}
+          style={{ padding: "2rem 1.5rem", marginTop: "2rem" }}
         >
-          <span className="pill pill-teal" style={{ marginBottom: "1rem" }}>
-            Private Tutor Workspace
+          <span className="pill pill-teal" style={{ marginBottom: "0.85rem" }}>
+            Returning Tutor Login
           </span>
-          <h1 style={{ fontSize: "1.6rem", marginBottom: "0.6rem" }}>
-            Open your dashboard link
+          <h1 style={{ fontSize: "1.65rem", marginBottom: "0.45rem" }}>
+            Log in to your existing profile
           </h1>
-          <p style={{ maxWidth: "460px", margin: "0 auto 1.5rem" }}>
-            Your TutorDesk dashboard is secured by your private URL token. Open
-            the bookmark you received when you signed up, or create a new tutor
-            profile to get started.
+          <p style={{ margin: "0 0 1.25rem", fontSize: "0.94rem" }}>
+            Paste your <strong>Secret Key</strong>, your{" "}
+            <strong>Private Dashboard Link</strong>, or your{" "}
+            <strong>Claude MCP Connector URL</strong> (you can always find it in{" "}
+            <strong>Claude → Settings → Connectors</strong>).
           </p>
-          <div className="btn-row" style={{ justifyContent: "center" }}>
-            <Link href="/" className="btn">
-              Create a tutor profile
-            </Link>
-          </div>
+
+          {invalid && (
+            <div
+              className="notice-banner"
+              style={{
+                marginBottom: "1rem",
+                background: "#fef2f2",
+                borderColor: "#fecaca",
+                borderLeftColor: "#dc2626",
+                color: "#7f1d1d",
+              }}
+            >
+              No tutor account matched that key or URL. Please check the link
+              from Claude Connectors or your signup bookmark and try again.
+            </div>
+          )}
+
+          <form action={loginWithKey}>
+            <label htmlFor="key_or_url">
+              Dashboard link, Claude MCP URL, or secret key
+            </label>
+            <input
+              id="key_or_url"
+              name="key_or_url"
+              placeholder="e.g. https://.../api/mcp/a1b2c3... or a1b2c3..."
+              required
+            />
+            <div className="btn-row">
+              <button type="submit">Open my dashboard</button>
+              <Link href="/#get-started" className="btn btn-alt">
+                Create new profile
+              </Link>
+            </div>
+          </form>
         </div>
       </main>
     );
@@ -79,6 +112,8 @@ export default async function DashboardPage({ searchParams }: any) {
   const host = (process.env.APP_URL || "").replace(/\/$/, "");
   const profilePath = `/t/${t.slug}`;
   const profileUrl = host ? `${host}${profilePath}` : profilePath;
+  const dashboardPath = `/dashboard?key=${t.token}`;
+  const dashboardUrl = host ? `${host}${dashboardPath}` : dashboardPath;
   const mcpUrl = `${host}/api/mcp/${t.token}`;
 
   const { data: enq } = await db
@@ -150,6 +185,7 @@ export default async function DashboardPage({ searchParams }: any) {
           <Link href={profilePath} className="btn btn-alt">
             View public profile ↗
           </Link>
+          <LogoutButton />
         </div>
       </div>
 
@@ -285,6 +321,23 @@ export default async function DashboardPage({ searchParams }: any) {
           <div className="code-bar">
             <span>{mcpUrl}</span>
             <CopyButton text={mcpUrl} label="Copy URL" />
+          </div>
+          <div
+            style={{
+              marginTop: "0.75rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "0.5rem",
+              flexWrap: "wrap",
+              fontSize: "0.82rem",
+              color: "var(--ink-muted)",
+            }}
+          >
+            <span>
+              Login key: <code>{t.token}</code>
+            </span>
+            <CopyButton text={dashboardUrl} label="Copy login link" />
           </div>
         </div>
       </section>

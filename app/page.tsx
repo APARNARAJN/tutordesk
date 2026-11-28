@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { signup } from "./actions";
 import { GPayQr } from "./components/GPayQr";
 
@@ -66,6 +67,20 @@ export default function Home() {
             <button type="submit" style={{ width: "100%" }}>
               Create tutor profile
             </button>
+
+            <p
+              style={{
+                margin: "0.75rem 0 0",
+                fontSize: "0.86rem",
+                textAlign: "center",
+                color: "var(--ink-soft)",
+              }}
+            >
+              Already have a profile?{" "}
+              <Link href="/dashboard" style={{ fontWeight: 600 }}>
+                Log in with your key or Claude MCP URL →
+              </Link>
+            </p>
 
             <div className="notice-banner" style={{ marginTop: "0.9rem" }}>
               <strong>Zero-risk client fee:</strong> You only pay{" "}

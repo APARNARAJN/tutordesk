@@ -84,3 +84,20 @@ export async function saveMaterial(f: FormData) {
   if (t) await db.from("materials").update({ title: f.get("title"), content: f.get("content") }).eq("id", f.get("id")).eq("tutor_id", t.id);
   revalidatePath("/dashboard");
 }
+
+function extractToken(raw: string): string {
+  const s = raw.trim();
+  if (!s) return "";
+  const keyMatch = s.match(/[?&]key=([^&#\s]+)/i);
+  if (keyMatch?.[1]) return decodeURIComponent(keyMatch[1]);
+  const mcpMatch = s.match(/\/api\/mcp\/([^/?#\s]+)/i);
+  if (mcpMatch?.[1]) return decodeURIComponent(mcpMatch[1]);
+  return s;
+}
+
+export async function loginWithKey(f: FormData) {
+  const token = extractToken(String(f.get("key_or_url") || ""));
+  const t = token ? await tutorByToken(token) : null;
+  if (!t) redirect("/dashboard?error=invalid");
+  redirect(`/dashboard?key=${encodeURIComponent(t.token)}`);
+}
