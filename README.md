@@ -5,10 +5,11 @@ Claude writes. TutorDesk keeps it live. No AI keys in this repo.
 1. Create a Supabase project, run `schema.sql` in the SQL editor.
 2. Push this folder to GitHub, import it in Vercel.
 3. Set env vars from `.env.example` (SUPABASE_URL, SUPABASE_SERVICE_KEY = service_role key, APP_URL = your Vercel URL).
-4. Open your site, sign up as a tutor. The dashboard shows your private connector URL.
+4. Open your site, sign up as a tutor. The dashboard shows the shared MCP URL and your Tutor Key.
 
 ## Connect to Claude
-Claude settings > Connectors > Add custom connector > paste `APP_URL/api/mcp/<your-token>`.
+Claude settings > Connectors > Add custom connector > paste `APP_URL/api/mcp`.
+Then in chat, provide your Tutor Key from the dashboard (or pass it when Claude asks).
 
 ## Try it
 "Create my profile: maths, classes 8-10, online and Nilambur, Rs 400/hour." Then submit an enquiry on /t/<slug>, then: "List my enquiries, draft a reply and a trial algebra lesson plan."

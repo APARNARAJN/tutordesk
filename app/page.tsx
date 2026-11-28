@@ -208,8 +208,8 @@ export default function Home() {
             <span className="step-num">2</span>
             <h3>Connect to Claude</h3>
             <p style={{ margin: 0, fontSize: "0.92rem" }}>
-              Copy your unique MCP connector URL from the dashboard into Claude
-              Settings → Connectors. No API keys needed.
+              Add TutorDesk&apos;s shared MCP URL (<code>/api/mcp</code>) in Claude
+              Settings → Connectors, then paste your Tutor Key in chat.
             </p>
           </div>
           <div className="card">

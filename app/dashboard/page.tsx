@@ -114,7 +114,7 @@ export default async function DashboardPage({ searchParams }: any) {
   const profileUrl = host ? `${host}${profilePath}` : profilePath;
   const dashboardPath = `/dashboard?key=${t.token}`;
   const dashboardUrl = host ? `${host}${dashboardPath}` : dashboardPath;
-  const mcpUrl = `${host}/api/mcp/${t.token}`;
+  const mcpUrl = host ? `${host}/api/mcp` : "/api/mcp";
 
   const { data: enq } = await db
     .from("enquiries")
@@ -312,19 +312,22 @@ export default async function DashboardPage({ searchParams }: any) {
             }}
           >
             <h3 style={{ margin: 0 }}>Connect to Claude (MCP)</h3>
-            <span className="pill pill-teal">Private URL</span>
+            <span className="pill pill-teal">Shared App MCP</span>
           </div>
-          <p style={{ fontSize: "0.86rem", margin: "0 0 0.75rem" }}>
-            In Claude: <strong>Settings → Connectors → Add custom connector</strong>{" "}
-            and paste this private URL:
+          <p style={{ fontSize: "0.86rem", margin: "0 0 0.65rem" }}>
+            1. In Claude: <strong>Settings → Connectors → Add custom connector</strong>{" "}
+            and paste the TutorDesk MCP URL:
           </p>
           <div className="code-bar">
             <span>{mcpUrl}</span>
             <CopyButton text={mcpUrl} label="Copy URL" />
           </div>
+          <p style={{ fontSize: "0.84rem", margin: "0.75rem 0 0.45rem" }}>
+            2. In your Claude chat, share your personal <strong>Tutor Key</strong>{" "}
+            (also used to log back into your dashboard):
+          </p>
           <div
             style={{
-              marginTop: "0.75rem",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
@@ -334,10 +337,11 @@ export default async function DashboardPage({ searchParams }: any) {
               color: "var(--ink-muted)",
             }}
           >
-            <span>
-              Login key: <code>{t.token}</code>
-            </span>
-            <CopyButton text={dashboardUrl} label="Copy login link" />
+            <code>{t.token}</code>
+            <div className="btn-row">
+              <CopyButton text={t.token} label="Copy key" />
+              <CopyButton text={dashboardUrl} label="Copy login link" />
+            </div>
           </div>
         </div>
       </section>
